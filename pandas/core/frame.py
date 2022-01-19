@@ -31,7 +31,7 @@ from typing import (
     overload,
 )
 import warnings
-
+import pandas as pd
 import numpy as np
 import numpy.ma as ma
 
@@ -3420,6 +3420,12 @@ class DataFrame(NDFrame, OpsMixin):
 
     # ----------------------------------------------------------------------
     # Indexing Methods
+    def split_by(self, freq: str):
+        df = self.copy()
+        if type(df.Date.values[0]):
+            df['Date'] = pd.to_datetime(df.Date)
+        groups = [g for n, g in df.groupby(pd.Grouper(key='Date',freq=str))]
+       return groups
 
     def _ixs(self, i: int, axis: int = 0):
         """
